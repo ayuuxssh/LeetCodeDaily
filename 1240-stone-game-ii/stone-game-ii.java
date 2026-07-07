@@ -1,45 +1,53 @@
 class Solution {
-    int n ;
-    int [][][]dp;
+    int n;
+    int[][][] dp;
+
     public int stoneGameII(int[] piles) {
         n = piles.length;
-        dp = new int[n][n+1][2];
-        for(int [][]it:dp)
+        dp = new int[n][n + 1][2];
+      for(int i=n-1;i>=0;i--)
+      {
+        for(int m =n;m>=1;m--)
         {
-            for(int []it1:it)
-            Arrays.fill(it1,-1);
-        }
-        return alice(1,0,1,piles);
-    }
-    private int alice(int person,int index,int m,int[]piles)
-    {
-        if(index>=n)
+        for(int person=0;person<=1;person++)
         {
-            return 0;
-        }
-   if(dp[index][m][person]!=-1)
-   {
-    return dp[index][m][person];
-   }
-        int stones =0;
-        int result =(person==1)?-1:Integer.MAX_VALUE;
+          int stones = 0;
+        int result = (person == 1) ? -1 : Integer.MAX_VALUE;
 
-        for(int x=1;x<=2*m;x++)
-        {
-            if(index+x-1<n)
-            {
-            stones+=piles[index+x-1];
-            }
-            if(person==1)
-            {
-                result = Math.max(result,stones+alice(0,index+x,Math.max(m,x),piles));
-           
+        for (int x = 1; x <= 2 * m; x++) {
+            if (i+ x - 1 < n) {
+                stones += piles[i + x - 1];
             }
             else
             {
-                result = Math.min(result,alice(1,index+x,Math.max(m,x),piles));
+                break;
+            }
+            if (person == 1) {
+                if(i+x<n)
+                {
+                result = Math.max(result, stones + dp[i+x][Math.max(m,x)][0]);
+                }
+                else
+                {
+                    result = Math.max(result,stones);
+                }
+
+            } else {
+                if(i+x<n)
+                {
+                result = Math.min(result, dp[i+x][Math.max(m,x)][1]);
+                }
+                else
+                {
+                    result = Math.min(result,0);
+                }
             }
         }
-        return dp[index][m][person]=result;
+         dp[i][m][person] = result;
+        }
+        }
+      }
+      return dp[0][1][1];
     }
+      
 }
