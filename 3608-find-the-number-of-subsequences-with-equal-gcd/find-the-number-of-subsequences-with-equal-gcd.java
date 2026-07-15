@@ -1,47 +1,52 @@
 class Solution {
-
-    static final int MOD = 1000000007;
-
+    int mod = (int)1e9+7;
+    int n ;
+    int [][][]dp;
     public int subsequencePairCount(int[] nums) {
-        int m = 0;
-        for (int num : nums) {
-            m = Math.max(m, num);
+        n = nums.length;
+        int maxi = Integer.MIN_VALUE;
+        for(int it:nums)
+        {
+            maxi= Math.max(maxi,it);
         }
-
-        int[][] dp = new int[m + 1][m + 1];
-        dp[0][0] = 1;
-
-        for (int num : nums) {
-            int[][] ndp = new int[m + 1][m + 1];
-            for (int j = 0; j <= m; j++) {
-                int divisor1 = gcd(j, num);
-                for (int k = 0; k <= m; k++) {
-                    int val = dp[j][k];
-                    if (val == 0) {
-                        continue;
-                    }
-                    int divisor2 = gcd(k, num);
-                    ndp[j][k] = (ndp[j][k] + val) % MOD;
-                    ndp[divisor1][k] = (ndp[divisor1][k] + val) % MOD;
-                    ndp[j][divisor2] = (ndp[j][divisor2] + val) % MOD;
-                }
+        dp= new int[n][maxi+1][maxi+1];
+        for(int [][]it:dp)
+        {
+            for(int []it1:it)
+            {
+                Arrays.fill(it1,-1);
             }
-            dp = ndp;
         }
-
-        int ans = 0;
-        for (int j = 1; j <= m; j++) {
-            ans = (ans + dp[j][j]) % MOD;
-        }
-        return ans;
+        int ans = count(nums,n-1,0,0);
+        return (ans-1+mod)%mod;
     }
-
-    private int gcd(int a, int b) {
-        while (b != 0) {
-            int temp = a;
-            a = b;
-            b = temp % b;
+    private int count(int []nums,int index,int gcd1,int gcd2)
+    {
+        if(index<0)
+        {
+            if(gcd1==gcd2)
+            {
+                return 1;
+            }
+            return 0;
         }
-        return a;
+         if(dp[index][gcd1][gcd2]!=-1)
+         {
+            return dp[index][gcd1][gcd2];
+         }
+        int skip = count(nums,index-1,gcd1,gcd2);
+        int nextgcd = gcd2==0?nums[index]:gcd(gcd2,nums[index]);
+        int skip1 = count(nums,index-1,gcd1,nextgcd);
+        int nextgcd1 = gcd1==0?nums[index]:gcd(gcd1,nums[index]);
+        int skip2 = count(nums,index-1,nextgcd1,gcd2);
+        return dp[index][gcd1][gcd2]=((skip+skip1)%mod+skip2)%mod;
+    }
+    private int gcd(int a,int b)
+    {
+        if(b==0)
+        {
+            return a;
+        }
+        return gcd(b,a%b);
     }
 }
