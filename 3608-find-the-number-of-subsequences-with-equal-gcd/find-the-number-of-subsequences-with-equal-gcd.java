@@ -9,37 +9,35 @@ class Solution {
         {
             maxi= Math.max(maxi,it);
         }
-        dp= new int[n][maxi+1][maxi+1];
-        for(int [][]it:dp)
+        dp= new int[n+1][maxi+1][maxi+1];
+       
+       for(int i=0;i<=maxi;i++)
+       {
+        for(int j=0;j<=maxi;j++)
         {
-            for(int []it1:it)
+            if(i==j)
             {
-                Arrays.fill(it1,-1);
+                dp[0][i][j]=1;
             }
         }
-        int ans = count(nums,n-1,0,0);
+       }
+       for(int i=1;i<=n;i++)
+       {
+        for(int j=maxi;j>=0;j--)
+        {
+            for(int k=maxi;k>=0;k--)
+            {
+                 int skip = dp[i-1][j][k];
+        int nextgcd = k==0?nums[i-1]:gcd(k,nums[i-1]);
+        int skip1 = dp[i-1][j][nextgcd];
+        int nextgcd1 = j==0?nums[i-1]:gcd(j,nums[i-1]);
+        int skip2 = dp[i-1][nextgcd1][k];
+         dp[i][j][k]=((skip+skip1)%mod+skip2)%mod;
+            }
+        }
+       }
+        int ans = dp[n][0][0];
         return (ans-1+mod)%mod;
-    }
-    private int count(int []nums,int index,int gcd1,int gcd2)
-    {
-        if(index<0)
-        {
-            if(gcd1==gcd2)
-            {
-                return 1;
-            }
-            return 0;
-        }
-         if(dp[index][gcd1][gcd2]!=-1)
-         {
-            return dp[index][gcd1][gcd2];
-         }
-        int skip = count(nums,index-1,gcd1,gcd2);
-        int nextgcd = gcd2==0?nums[index]:gcd(gcd2,nums[index]);
-        int skip1 = count(nums,index-1,gcd1,nextgcd);
-        int nextgcd1 = gcd1==0?nums[index]:gcd(gcd1,nums[index]);
-        int skip2 = count(nums,index-1,nextgcd1,gcd2);
-        return dp[index][gcd1][gcd2]=((skip+skip1)%mod+skip2)%mod;
     }
     private int gcd(int a,int b)
     {
