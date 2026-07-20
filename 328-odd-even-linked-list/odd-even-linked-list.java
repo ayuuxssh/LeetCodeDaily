@@ -21,11 +21,11 @@ class Solution {
        ListNode temp = head;
        ListNode temp1 =temp.next;
        ListNode even = head.next;
-       while(temp.next!=null && even.next!=null)
+       while(even!=null && even.next!=null)
        {
-        temp.next = even.next;
-        temp = temp.next;
-        even.next = temp.next;
+        temp.next = temp.next.next;
+        even.next = even.next.next;
+        temp= temp.next;
         even = even.next;
         }
        temp.next = temp1;
