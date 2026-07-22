@@ -1,36 +1,38 @@
 class Solution {
-
     public int maxActiveSectionsAfterTrade(String s) {
         int n = s.length();
-        int cnt1 = 0;
-        for (char c : s.toCharArray()) {
-            if (c == '1') cnt1++;
-        }
-
-        List<Integer> zeroBlocks = new ArrayList<>();
-        int i = 0;
-        while (i < n) {
-            int start = i;
-            while (i < n && s.charAt(i) == s.charAt(start)) {
-                i++;
-            }
-            if (s.charAt(start) == '0') {
-                zeroBlocks.add(i - start);
+        int count1=0;
+        for(int i=0;i<n;i++)
+        {
+            if(s.charAt(i)=='1')
+            {
+                count1++;
             }
         }
-
-        int m = zeroBlocks.size();
-        if (m < 2) {
-            return cnt1;
+        List<Integer>list = new ArrayList<>();
+        int count=0;
+        int k=0;
+        while(k<n)
+        {
+           int start = k;
+           while(k<n && s.charAt(start)==s.charAt(k))
+           {
+            k++;
+           }
+           if(s.charAt(start)=='0')
+           {
+            list.add(k-start);
+           }
         }
-        int bestGain = 0; // Optimal Increment
-        for (int j = 0; j < m - 1; j++) {
-            bestGain = Math.max(
-                bestGain,
-                zeroBlocks.get(j) + zeroBlocks.get(j + 1)
-            );
-        }
-
-        return cnt1 + bestGain;
+        // for(int it:list)
+        // {
+        // System.out.println(it);
+        // }
+        int ans=0;
+      for(int i=0;i<list.size()-1;i++)
+      {
+        ans = Math.max(ans,list.get(i)+list.get(i+1));
+      }
+        return ans+count1;
     }
 }
