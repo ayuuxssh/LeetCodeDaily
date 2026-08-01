@@ -1,25 +1,16 @@
 class Solution {
-    int [][]dp;
+    int []dp;
     public String stoneGameIII(int[] stoneValue) {
         int total =0;
         int n = stoneValue.length;
-        dp = new int[n][2];
-        for(int []it:dp)
-        {
-            Arrays.fill(it,-1);
-        }
-        for(int it:stoneValue)
-        {
-            total+=it;
-        }
-        int player1 = game(stoneValue,0,0);
-        System.out.println(player1);
-        int player2 = total -player1;
-        if(player1>player2)
+        dp = new int[n];
+            Arrays.fill(dp,-1);
+        int diff = game(stoneValue,0);
+        if(diff>0)
         {
             return "Alice";
         }
-        else if(player1<player2)
+        else if(diff<0)
         {
             return "Bob";
         }
@@ -28,38 +19,25 @@ class Solution {
             return "Tie";
         }
     }
-    private int game(int []stoneValue,int i,int chance)
+    private int game(int []stoneValue,int i)
     {
         if(i>=stoneValue.length)
         {
         return 0;
         }
-        if(dp[i][chance]!=-1)
+        if(dp[i]!=-1)
         {
-            return dp[i][chance];
+            return dp[i];
         }
-        if(chance==0)
-        {
+        
             int sum =0;
             int ans= Integer.MIN_VALUE;
              for(int index=i;index<=Math.min(stoneValue.length-1,i+2);index++)
         {
            sum+=stoneValue[index];
-            int take = sum+game(stoneValue,index+1,1);
+            int take = sum-game(stoneValue,index+1);
             ans = Math.max(ans,take);
         }
-            return dp[i][chance]= ans;
-        }
-        else
-        {
-        int sum =0;
-        int ans1 = Integer.MAX_VALUE;
-            for(int index=i;index<=Math.min(stoneValue.length-1,i+2);index++)
-          {
-            int take = sum+game(stoneValue,index+1,0);
-            ans1 = Math.min(ans1,take);
-          }
-            return dp[i][chance]= ans1;
-        }
+            return dp[i]= ans;
     }
 }    
