@@ -5,7 +5,7 @@ public:
         int i = 0;
         int j = 0;
         int ans = INT_MIN;
-        map<int, int> mp;
+        unordered_map<int, int> mp;
         while (j < n) {
             mp[nums[j]]++;
 
