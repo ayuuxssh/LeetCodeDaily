@@ -2,7 +2,7 @@ class Solution {
 public:
     int lengthOfLongestSubstring(string s) {
         int n = s.length();
-        map<char, int> mp;
+        unordered_map<char, int> mp;
         set<int> st;
         int i = 0;
         int j = 0;
