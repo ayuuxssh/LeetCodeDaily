@@ -1,33 +1,26 @@
 class Solution {
 public:
     int maxNumberOfFamilies(int n, vector<vector<int>>& reservedSeats) {
-        unordered_map<int,unordered_set<int>>mp;
-        for(auto it:reservedSeats)
-        {
+        unordered_map<int, int> mp;
+        for (auto it : reservedSeats) {
             int row = it[0];
             int col = it[1];
-            mp[row].insert(col);
+            mp[row] |= (1 << col);
         }
 
-        int result = (n-mp.size())*2;
-        for(auto &[row,booked]:mp)
-        {
-            auto isAvail = [&](int seat)
-            {
-                return booked.find(seat)==booked.end();
-            };
+        int result = (n - mp.size()) * 2;
+        int grpA = (1 << 2) | (1 << 3) | (1 << 4) | (1 << 5);
+        int grpB = (1 << 4) | (1 << 5) | (1 << 6) | (1 << 7);
+        int grpC = (1 << 6) | (1 << 7) | (1 << 8) | (1 << 9);
+        for (auto& it : mp) {
+            bool grpA1 = (it.second & grpA) == 0;
+            bool grpB1 = (it.second & grpB) == 0;
+            bool grpC1 = (it.second & grpC) == 0;
 
-            bool grpA = isAvail(2) && isAvail(3) && isAvail(4) && isAvail(5);
-            bool grpB = isAvail(4) && isAvail(5) && isAvail(6) && isAvail(7);
-            bool grpC = isAvail(6) && isAvail(7) && isAvail(8) && isAvail(9);
-
-            if(grpA  && grpC)
-            {
-                result+=2;
-            }
-            else if(grpA || grpB || grpC)
-            {
-                result+=1;
+            if (grpA1 && grpC1) {
+                result += 2;
+            } else if (grpA1 || grpB1 || grpC1) {
+                result += 1;
             }
         }
         return result;
