@@ -3,7 +3,6 @@ private:
     long long comb(long long n, long long m, long long k) {
         long long res = 1;
         m = std::min(m, n - m);
-
         for (long long i = 1; i <= m; i++) {
             res = res * (n - i + 1) / i;
             if (res > k) {
@@ -17,7 +16,10 @@ public:
     string smallestPalindrome(string s, long long k) {
         int partition = s.length() / 2;
         vector<int> bucket(26, 0);
-
+        if(s.length()==1 && k==2)
+        {
+            return "";
+        }
         for (int i = 0; i < partition; i++) {
             bucket[s[i] - 'a'] += 1;
         }
