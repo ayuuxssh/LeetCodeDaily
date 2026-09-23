@@ -5,9 +5,8 @@ class Solution {
         for (int it : nums) {
             sum += it;
         }
-        long k = (long)sum - (long)x;
-        if(k<0)
-        {
+        long k = (long) sum - (long) x;
+        if (k < 0) {
             return -1;
         }
         int i = 0;
@@ -20,23 +19,21 @@ class Solution {
                 j++;
             } else if (total == k) {
                 ans = Math.max(ans, j - i + 1);
-                 System.out.println(ans);
+                // System.out.println(ans);
                 j++;
             } else {
                 while (total > k) {
                     total -= nums[i];
                     i++;
                 }
-                if(total==k)
-                {
-    
-                    ans=Math.max(ans,j-i+1);
+                if (total == k) {
+
+                    ans = Math.max(ans, j - i + 1);
                 }
                 j++;
             }
         }
-        if(ans==0 && k!=0)
-        {
+        if (ans == 0 && k != 0) {
             return -1;
         }
         return n - ans;
