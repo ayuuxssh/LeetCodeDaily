@@ -1,46 +1,49 @@
 class Solution {
     public int closedIsland(int[][] grid) {
-        int m = grid.length;
-        int n = grid[0].length;
-        boolean[][] visit = new boolean[m][n];
+        int n = grid.length;
+        int m = grid[0].length;
+        boolean[][] vis = new boolean[n][m];
         int count = 0;
-        for (int i = 0; i < m; i++) {
-            for (int j = 0; j < n; j++) {
-                if (grid[i][j] == 0 && !visit[i][j] && bfs(i, j, m, n, grid, visit)) {
+        for (int i = 1; i < n-1; i++) {
+            for (int j = 1; j < m-1; j++) {
+                if (grid[i][j] == 0 && !vis[i][j] && bfs(grid,i,j,vis)) {
                     count++;
+                    
                 }
             }
         }
         return count;
     }
 
-    public boolean bfs(int x, int y, int m, int n, int[][] grid, boolean[][] visit) {
+    private boolean bfs(int[][] grid, int row, int col, boolean[][] vis) {
+        vis[row][col] = true;
+        int n = grid.length;
+        int m = grid[0].length;
         Queue<int[]> q = new LinkedList<>();
-        q.offer(new int[]{x, y});
-        visit[x][y] = true;
-        boolean isClosed = true;
-
-        int[] dirx = {0, 1, 0, -1};
-        int[] diry = {-1, 0, 1, 0};
+        int[] dirrow = { 1, -1, 0, 0 };
+        int[] dircol = { 0, 0, 1, -1 };
+               boolean isclosed = true;
+        q.add(new int[] { row, col });
 
         while (!q.isEmpty()) {
-            int[] temp = q.poll();
-            x = temp[0];
-            y = temp[1];
+            int[] rc = q.poll();
+            int r = rc[0];
+            int c = rc[1];
 
             for (int i = 0; i < 4; i++) {
-                int r = x +dirx[i];
-                int c = y +diry[i];
-                if (r < 0 || r >= m || c < 0 || c >= n) {
-                    // (x, y) is a boundary cell.
-                    isClosed = false;
-                } else if (grid[r][c] == 0 && !visit[r][c]) {
-                    q.offer(new int[]{r, c});
-                    visit[r][c] = true;
+                int nr = r + dirrow[i];
+                int nc = c + dircol[i];
+                 if(nr<0 || nc<0 || nr>=n || nc>=m)
+                 {
+                    isclosed = false;
+                 }
+                 else if(grid[nr][nc]==0 && !vis[nr][nc])
+                 {
+                    vis[nr][nc] = true;
+                    q.add(new int[] { nr, nc });
+                 }
                 }
             }
+            return isclosed;
         }
-
-        return isClosed;
-    }
 }
