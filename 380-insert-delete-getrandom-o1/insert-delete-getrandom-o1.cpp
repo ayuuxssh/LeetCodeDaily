@@ -20,19 +20,12 @@ public:
         {
             return false;
         }
-        if(v.size()==1)
-        {
-            v.pop_back();
-        }
-        else
-        {
         int idx = mp[val];
         int last = v.back();
-        v[v.size()-1] = val;
+        v.back()=val;
         v[idx]= last;
         v.pop_back();
         mp[last]=idx;
-        }
         mp.erase(val);
         
         return true;
