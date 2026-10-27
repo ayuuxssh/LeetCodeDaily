@@ -1,40 +1,41 @@
 class LRUCache {
 public:
-vector<pair<int,int>>v;
-unordered_map<int,int>mp;
+list<int>dll;
+unordered_map<int,pair<list<int>::iterator,int>>mp;
 int cap ;
     LRUCache(int capacity) {
         cap = capacity;
     }
     
-    int get(int key) {
+    int get(int key) { // O(2N)
         if(mp.find(key)==mp.end())
         {
             return -1;
         }
         // cout<<key<<" "<<mp[key]<<endl;
-        auto it = find(v.begin(),v.end(),make_pair(key,mp[key]));
-        v.erase(it);
-        v.push_back({key,mp[key]});
-        return mp[key];
+       auto it = mp[key].first;
+       dll.erase(it);
+       dll.push_front(key);
+       mp[key]={dll.begin(),mp[key].second};
+       return mp[key].second;
     }
     
-    void put(int key, int value) {
+    void put(int key, int value) { //O(2N)
          if(mp.find(key)!=mp.end())
          {
-            auto it = find(v.begin(),v.end(),make_pair(key,mp[key]));
-            v.erase(it);
+            auto it= mp[key].first;
+            dll.erase(it);
          }
-         else if(v.size()==cap)
+         else if(dll.size()==cap)
          {
-            auto it = v.begin();
+            int k = dll.back();
             //  cout<<it->first<<endl;
-            mp.erase(it->first);
-            v.erase(it);
+            dll.pop_back();
+           mp.erase(k);
             
          }
-         v.push_back({key,value});
-         mp[key]=value;
+        dll.push_front(key);
+         mp[key]={dll.begin(),value};
     }
 };
 
